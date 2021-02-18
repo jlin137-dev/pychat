@@ -29,7 +29,7 @@ except:
 
 USERNAME = input("Pick a username: ")
 
-MESSAGE = f"{USERNAME} has joined the chat!"
+MESSAGE = f"{USERNAME} has entered the realm!"
 
 def Send_message():
     global MESSAGE
