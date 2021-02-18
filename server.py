@@ -17,7 +17,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.bind((HOST, PORT))
 s.listen(1)
 
-print(f"Server initiated on  {HOST}:{PORT}...\n")
+print(f"Server has been initiated on  {HOST}:{PORT}...\n")
 while True:
     client_connection, client_address = s.accept()
 
