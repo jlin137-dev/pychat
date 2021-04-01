@@ -12,11 +12,13 @@ BUFFER_SIZE = 1024
 message = ""
 # send through different port so chat watcher still the same but with idffernet port it goes in so don't have same connection problem
 def send(ip, msg):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((ip, 3001))
-    s.send(msg.encode())
-    MESSAGE = "server says hi"
-    s.close()
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((ip, 3001))
+        s.send(msg.encode())
+        s.close()
+    except:
+        pass
 
 print("Starting up server...")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
