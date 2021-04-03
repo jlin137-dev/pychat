@@ -20,6 +20,7 @@ CRASHES = 0
 #check if server is online
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(3)
     s.connect((HOST, PORT))
     s.close()
 except:
