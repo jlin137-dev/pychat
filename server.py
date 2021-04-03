@@ -1,4 +1,5 @@
 import socket
+from time import sleep
 
 HOSTNAME = socket.gethostname()
 
@@ -10,10 +11,11 @@ PORT = 3000
 BUFFER_SIZE = 1024
 
 message = ""
-# send through different port so chat watcher still the same but with idffernet port it goes in so don't have same connection problem
+
 def send(ip, msg):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(0.1)
         s.connect((ip, 3001))
         s.send(msg.encode())
         s.close()
