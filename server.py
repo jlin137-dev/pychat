@@ -5,7 +5,7 @@ HOSTNAME = socket.gethostname()
 
 IP_ADDRESS = socket.gethostbyname(HOSTNAME)
 
-HOST = IP_ADDRESS
+HOST = "0.0.0.0" #IP_ADDRESS
 PORT = 3000
 
 BUFFER_SIZE = 1024
@@ -37,7 +37,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.bind((HOST, PORT))
 s.listen(5)
 
-print(f"Server has been initiated on  {HOST}:{PORT}...\n")
+print(f"Server has been initiated on  {IPADDRESS}:{PORT}...\n")
 while True:
     client_connection, client_address = s.accept()
 
