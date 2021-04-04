@@ -12,15 +12,24 @@ BUFFER_SIZE = 1024
 
 message = ""
 
-def send(ip, msg):
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(0.1)
-        s.connect((ip, 3001))
-        s.send(msg.encode())
-        s.close()
-    except:
-        pass
+#list of connections to server
+connections = list()
+
+def send(msg):
+    # goes through connections to server
+    for ip in connections:
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            #setting time out to 0.1 of a second so incase chatwatcher isn't active it won't stop
+            s.settimeout(0.1)
+            s.connect((ip, 3001))
+            #sending mesage
+            s.send(msg.encode())
+            s.close()
+        except:
+            #remove the ip if connection can't be established to it
+            connections.remove(ip) 
+    
 
 print("Starting up server...")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,9 +46,11 @@ while True:
     message = request_data.decode("utf-8")
 
     print(message)
+    #if the ip of the connection isn't in the conections list it will add it
+    if not client_address[0] in connections:
+        connections.append(client_address[0])
 
-    client_connection.send(message.encode())
-    send(client_address[0],message)
+    send(message)
     message = ""
 
 s.close()
