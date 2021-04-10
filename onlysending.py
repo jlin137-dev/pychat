@@ -1,35 +1,23 @@
 import socket
 from time import sleep
-from subprocess import check_output
-from os import system
-import re
 
-while True:
-    HOST = input("Enter IP adress of server: ")
-    #check if is valid
-    ip_check = re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",HOST)
-    if ip_check:
-        break
+HOST = input("Enter IP adress of server: ")
+
 PORT = 3000
 
 BUFFER_SIZE = 1024
 
-WIFI_NAME = check_output(['netsh', 'wlan', 'show', 'interfaces']).decode('utf-8').split('\n')[19].split(":").pop(1)[1:].replace(" \r","")
-
-CRASHES = 0
 #check if server is online
-try:
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(3)
-    s.connect((HOST, PORT))
-    s.close()
-except:
-    print("Cannot establish connection to servers...\nExiting in 3 seconds")
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+if not s.connect_ex((HOST, PORT)) == 0:
+    print(f"Cannot connect to {HOST}:{PORT}")
+    #waits 3 seconds before exiting
     sleep(3)
     exit()
+s.close()
 
 USERNAME = input("Pick a username: ")
-
+#join message
 MESSAGE = f"{USERNAME} has entered the realm!"
 
 def Send_message():

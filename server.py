@@ -1,11 +1,9 @@
 import socket
-from time import sleep
 
-HOSTNAME = socket.gethostname()
+IP_ADDRESS = socket.gethostbyname(socket.gethostname())
 
-IP_ADDRESS = socket.gethostbyname(HOSTNAME)
+HOST = "0.0.0.0"
 
-HOST = "0.0.0.0" #IP_ADDRESS
 PORT = 3000
 
 BUFFER_SIZE = 1024
@@ -20,8 +18,9 @@ def send(msg):
     for ip in connections:
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #setting time out to 0.1 of a second so incase chatwatcher isn't active it won't stop
+            #setting time out to 0.1 of a second so incase chatwatcher isn't active it won't block
             s.settimeout(0.1)
+            #connect
             s.connect((ip, 3001))
             #sending mesage
             s.send(msg.encode())
@@ -30,7 +29,6 @@ def send(msg):
             #remove the ip if connection can't be established to it
             connections.remove(ip) 
     
-
 print("Starting up server...")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -39,18 +37,19 @@ s.listen(5)
 
 print(f"Server has been initiated on  {IP_ADDRESS}:{PORT}...\n")
 while True:
+    #accept client connection
     client_connection, client_address = s.accept()
-
+    #receive data
     request_data = client_connection.recv(BUFFER_SIZE)
-
+    #decode messge from binary to uft-8
     message = request_data.decode("utf-8")
 
-    print(message)
     #if the ip of the connection isn't in the conections list it will add it
     if not client_address[0] in connections:
         connections.append(client_address[0])
-
+    #send message to all connections in list
     send(message)
+    #reset message
     message = ""
 
 s.close()
