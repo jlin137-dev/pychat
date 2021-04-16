@@ -1,4 +1,5 @@
 import socket
+import threading
 
 IP_ADDRESS = socket.gethostbyname(socket.gethostname())
 
@@ -47,8 +48,12 @@ while True:
     #if the ip of the connection isn't in the conections list it will add it
     if not client_address[0] in connections:
         connections.append(client_address[0])
+
+    #for debugging
+    print(message)
     #send message to all connections in list
-    send(message)
+    syncsend = threading.Thread(target=send, args=(message,))
+    syncsend.start()
     #reset message
     message = ""
 
